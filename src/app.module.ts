@@ -1,27 +1,31 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from '@ecom/auth/auth.module';
 import { ProductModule } from '@ecom/product/product.module';
-import configuration from '@ecom/config/configuration';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from '@ecom/user/user.module';
+import database from './config/database';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
     AuthModule,
     ProductModule,
     ConfigModule.forRoot({
-      load: [configuration],
+      load: [database],
     }),
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: process.env.DB_HOST,
-      port: parseInt(process.env.DB_PORT),
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_DATABASE,
-      autoLoadEntities: true,
-      synchronize: true,
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        type: 'postgres',
+        host: configService.get<string>('database.host'),
+        port: configService.get<number>('database.port'),
+        username: configService.get<string>('database.username'),
+        password: configService.get<string>('database.password'),
+        database: configService.get<string>('database.name'),
+        autoLoadEntities: true,
+        synchronize: true,
+      }),
     }),
     UserModule,
   ],
