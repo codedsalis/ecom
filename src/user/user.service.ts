@@ -45,9 +45,14 @@ export class UserService {
     await this.userRepository.save(user);
 
     await this.emailService
-      .send(user.email, 'Welcome to e-com app', './welcome', {
-        name: user.name,
-      })
+      .send(
+        `"${user.name}" <${user.email}>`,
+        'Welcome to e-com app',
+        './welcome',
+        {
+          name: user.name,
+        },
+      )
       .catch((error) => {
         Logger.debug(error);
       });
