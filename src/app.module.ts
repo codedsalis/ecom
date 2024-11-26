@@ -5,6 +5,13 @@ import { ProductModule } from '@ecom/product/product.module';
 import { UserModule } from '@ecom/user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import databaseConfig from './config/database.config';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { mailerConfig } from './config/mailer.config';
+import { BullModule } from '@nestjs/bull';
+// import { EmailModule } from './email/email.module';
+import { EmailService } from './email/email.service';
+import { EmailProcessor } from './email/email.processor';
+import { EmailModule } from './email/email.module';
 
 @Module({
   imports: [
@@ -28,9 +35,20 @@ import databaseConfig from './config/database.config';
         synchronize: true,
       }),
     }),
+    MailerModule.forRoot(mailerConfig),
+    BullModule.forRoot({
+      redis: {
+        host: 'localhost',
+        port: 6379,
+      },
+    }),
+    BullModule.registerQueue({
+      name: 'email',
+    }),
     UserModule,
+    EmailModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [EmailService, EmailProcessor],
 })
 export class AppModule {}

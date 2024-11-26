@@ -1,15 +1,17 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
 import { RegisterDto } from '@ecom/auth/dtos/register.dto';
 import * as bcrypt from 'bcrypt';
+import { EmailService } from '../email/email.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
-    private userRepository: Repository<User>,
+    private readonly userRepository: Repository<User>,
+    private readonly emailService: EmailService,
   ) {}
 
   findAll(): Promise<User[]> {
@@ -41,6 +43,15 @@ export class UserService {
     user.password = hashedPassword;
 
     await this.userRepository.save(user);
+
+    await this.emailService
+      .send(user.email, 'Welcome to e-com app', './welcome', {
+        name: user.name,
+      })
+      .catch((error) => {
+        Logger.debug(error);
+      });
+
     return user;
   }
 
