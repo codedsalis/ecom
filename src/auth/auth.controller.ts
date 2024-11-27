@@ -3,10 +3,10 @@ import { Body, Controller, HttpStatus, Post, Res } from '@nestjs/common';
 import { RegisterDto } from './dtos/register.dto';
 import { AuthService } from './auth.service';
 import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Success } from '@ecom/common/responses';
 import { LoginDto } from './dtos/Login.dto';
 import { LoginResponse } from './dtos/login-response.dto';
 import { Response } from 'express';
+import { RegistrationResponse } from './dtos/registration-response.dto';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -17,13 +17,13 @@ export class AuthController extends BaseController {
 
   @Post('/register')
   @ApiBody({ type: RegisterDto })
-  @ApiResponse({ type: Success<RegisterDto>, status: 201 })
+  @ApiResponse({ type: RegistrationResponse, status: 201 })
   async register(@Body() registerDto: RegisterDto, @Res() response: Response) {
     const user = await this.authService.register(registerDto);
 
-    return response.status(HttpStatus.CREATED).json({
-      ...user,
-    });
+    return response
+      .status(HttpStatus.CREATED)
+      .json(RegistrationResponse.toModel(user, HttpStatus.CREATED));
   }
 
   @Post('/login')
@@ -32,10 +32,8 @@ export class AuthController extends BaseController {
   async login(@Body() loginDto: LoginDto, @Res() response: Response) {
     const accessToken: string = await this.authService.login(loginDto);
 
-    return response.status(HttpStatus.OK).json({
-      status: 'success',
-      statusCode: HttpStatus.OK,
-      accessToken,
-    });
+    return response
+      .status(HttpStatus.OK)
+      .json(LoginResponse.toModel({ accessToken }));
   }
 }
