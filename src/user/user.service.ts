@@ -44,7 +44,7 @@ export class UserService {
 
     await this.userRepository.save(user);
 
-    await this.emailService
+    this.emailService
       .send(
         `"${user.name}" <${user.email}>`,
         'Welcome to e-com app',
