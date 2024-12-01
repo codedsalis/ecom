@@ -1,2 +1,85 @@
-<h1>Hi {{name}}!</h1>
-<p>Welcome, we're excited to have you on board.</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Our Platform!</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7fc;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .header {
+            background-color: #5c6bc0;
+            padding: 20px;
+            text-align: center;
+            color: #ffffff;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .content {
+            padding: 30px;
+            text-align: center;
+        }
+        .content p {
+            font-size: 16px;
+            line-height: 1.5;
+            color: #666;
+        }
+        .cta-button {
+            background-color: #5c6bc0;
+            color: #ffffff;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 16px;
+            display: inline-block;
+            margin-top: 20px;
+        }
+        .footer {
+            background-color: #f4f7fc;
+            padding: 20px;
+            text-align: center;
+            font-size: 14px;
+            color: #888;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+        .footer a {
+            color: #5c6bc0;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Hello, {{name}}!</h1>
+        </div>
+        <div class="content">
+            <p>We're thrilled to welcome you to our platform! It's great to have you on board.</p>
+            <p>To get started, you can explore our features and take full advantage of everything we offer. We’re here to support you every step of the way.</p>
+            <a href="#" class="cta-button">Get Started</a>
+        </div>
+        <div class="footer">
+            <p>If you have any questions, feel free to <a href="mailto:support@ourplatform.com">contact us</a>. We're happy to help!</p>
+            <p>Thank you for joining us!</p>
+        </div>
+    </div>
+</body>
+</html>
