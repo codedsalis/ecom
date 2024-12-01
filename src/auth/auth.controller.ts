@@ -7,6 +7,9 @@ import { LoginDto } from './dtos/Login.dto';
 import { LoginResponse } from './dtos/login-response.dto';
 import { Response } from 'express';
 import { RegistrationResponse } from './dtos/registration-response.dto';
+import { plainToInstance } from 'class-transformer';
+import { UserDto } from '@ecom/user/dto/user.dto';
+import { SkipAuth } from './decorators/skip-auth.decorator';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -15,6 +18,7 @@ export class AuthController extends BaseController {
     super();
   }
 
+  @SkipAuth()
   @Post('/register')
   @ApiBody({ type: RegisterDto })
   @ApiResponse({ type: RegistrationResponse, status: 201 })
@@ -23,9 +27,15 @@ export class AuthController extends BaseController {
 
     return response
       .status(HttpStatus.CREATED)
-      .json(RegistrationResponse.toModel(user, HttpStatus.CREATED));
+      .json(
+        RegistrationResponse.toModel(
+          plainToInstance(UserDto, user),
+          HttpStatus.CREATED,
+        ),
+      );
   }
 
+  @SkipAuth()
   @Post('/login')
   @ApiBody({ type: LoginDto })
   @ApiResponse({ type: LoginResponse, status: HttpStatus.OK })
