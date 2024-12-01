@@ -1,17 +1,17 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { AuthModule } from '@ecom/auth/auth.module';
-import { ProductModule } from '@ecom/product/product.module';
-import { UserModule } from '@ecom/user/user.module';
+import { AuthModule } from './auth/auth.module';
+import { ProductModule } from './product/product.module';
+import { UserModule } from './user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import databaseConfig from './config/database.config';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { mailerConfig } from './config/mailer.config';
 import { BullModule } from '@nestjs/bull';
-// import { EmailModule } from './email/email.module';
 import { EmailService } from './email/email.service';
 import { EmailProcessor } from './email/email.processor';
 import { EmailModule } from './email/email.module';
+import { InventoryModule } from './inventory/inventory.module';
 
 @Module({
   imports: [
@@ -33,6 +33,7 @@ import { EmailModule } from './email/email.module';
         database: configService.get<string>('databaseConfig.name'),
         autoLoadEntities: true,
         synchronize: true,
+        logging: true,
       }),
     }),
     MailerModule.forRoot(mailerConfig),
@@ -47,6 +48,7 @@ import { EmailModule } from './email/email.module';
     }),
     UserModule,
     EmailModule,
+    InventoryModule,
   ],
   controllers: [],
   providers: [EmailService, EmailProcessor],
