@@ -4,7 +4,7 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { cors: true });
 
   app.useGlobalPipes(new ValidationPipe());
   app.setGlobalPrefix('api');
@@ -13,6 +13,7 @@ async function bootstrap() {
     .setTitle('Ecom')
     .setDescription('The ecom API')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, documentFactory);
