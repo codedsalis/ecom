@@ -6,6 +6,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Role } from '@ecom/common/enums/role.enum';
 
 @Entity({ name: 'users' })
 export class User {
@@ -25,8 +26,8 @@ export class User {
   @Column({ name: 'email_verified_at', type: 'timestamp', nullable: true })
   emailVerifiedAt: string;
 
-  @Column({ name: 'role', nullable: true, default: 'user' })
-  role: string;
+  @Column({ name: 'roles', type: 'json', nullable: true, default: '["user"]' })
+  roles: Role[];
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamp', nullable: true })
   createdAt: string;

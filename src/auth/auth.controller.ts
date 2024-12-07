@@ -1,5 +1,12 @@
 import { BaseController } from '@ecom/common/base.controller';
-import { Body, Controller, HttpStatus, Post, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpStatus,
+  Inject,
+  Post,
+  Res,
+} from '@nestjs/common';
 import { RegisterDto } from './dtos/register.dto';
 import { AuthService } from './auth.service';
 import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -10,11 +17,16 @@ import { RegistrationResponse } from './dtos/registration-response.dto';
 import { plainToInstance } from 'class-transformer';
 import { UserDto } from '@ecom/user/dto/user.dto';
 import { SkipAuth } from './decorators/skip-auth.decorator';
+import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
+import { Logger } from 'winston';
 
 @ApiTags('Authentication')
 @Controller('auth')
 export class AuthController extends BaseController {
-  constructor(private readonly authService: AuthService) {
+  constructor(
+    @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
+    private readonly authService: AuthService,
+  ) {
     super();
   }
 
@@ -41,7 +53,7 @@ export class AuthController extends BaseController {
   @ApiResponse({ type: LoginResponse, status: HttpStatus.OK })
   async login(@Body() loginDto: LoginDto, @Res() response: Response) {
     const accessToken: string = await this.authService.login(loginDto);
-
+    // this.logger.debug(accessToken);
     return response
       .status(HttpStatus.OK)
       .json(LoginResponse.toModel({ accessToken }));

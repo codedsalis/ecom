@@ -51,4 +51,6 @@ export class ProductService {
       await queryRunner.release();
     }
   }
+
+  async findPaginated() {}
 }

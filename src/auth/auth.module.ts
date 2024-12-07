@@ -7,6 +7,7 @@ import { UserModule } from '@ecom/user/user.module';
 import appConfig from '@ecom/config/app.config';
 import { AuthGuard } from './auth.guard';
 import { APP_GUARD } from '@nestjs/core';
+import { RolesGuard } from '@ecom/common/guards/roles.guard';
 
 @Module({
   imports: [
@@ -29,6 +30,10 @@ import { APP_GUARD } from '@nestjs/core';
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
     },
   ],
   controllers: [AuthController],

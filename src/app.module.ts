@@ -12,6 +12,7 @@ import { EmailService } from './email/email.service';
 import { EmailProcessor } from './email/email.processor';
 import { EmailModule } from './email/email.module';
 import { InventoryModule } from './inventory/inventory.module';
+import { WinstonModule } from 'nest-winston';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { InventoryModule } from './inventory/inventory.module';
         logging: true,
       }),
     }),
+    WinstonModule.forRoot({}),
     MailerModule.forRoot(mailerConfig),
     BullModule.forRoot({
       redis: {
